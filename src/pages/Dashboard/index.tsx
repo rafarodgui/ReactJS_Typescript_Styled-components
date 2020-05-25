@@ -1,4 +1,6 @@
-import React, { FormEvent, useState, useEffect } from 'react';
+import React, {
+  FormEvent, useState, useEffect, MouseEventHandler,
+} from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -57,8 +59,6 @@ const Dashboard: React.FC = () => {
 
       setRepositories([...repositories, repository]);
 
-      // localStorage.setItem('repository', repositories[]);
-
       setNewRepo('');
       setInputError('');
     } catch {
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
                     <strong>{repository.full_name}</strong>
                     <p>{repository.description}</p>
                   </div>
-                  <MdChevronRight size={24} color="#ff5500" />
+                  <MdChevronRight size={24} color="##ff5500" />
                 </Link>
               ))
           }

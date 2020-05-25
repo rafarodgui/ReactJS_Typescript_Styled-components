@@ -41,12 +41,12 @@ export const Form = styled.form<FormProps>`
         padding: 10px;
         width: 150px;
         color: #fff;
-        background: #ff5500;
+        background: #3c0;
         border-radius: 0 5px 5px 0;
         transition: background-color 0.2s;
 
         &:hover {
-            background: ${darken(0.08, '#ff5500')}
+            background: ${darken(0.08, '#3c0')}
         }
     }
 `;
@@ -74,8 +74,8 @@ export const Repositories = styled.div`
         }
 
         &:hover {
-            transform: translateX(8px);
             background: ${darken(0.04, '#fff')};
+            transform: translateX(8px);
             transition: 0.2s;
         }
 

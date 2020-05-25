@@ -58,7 +58,7 @@ export const RepositoryInfo = styled.section`
 
     ul {
         list-style: none;
-        margin-top: 30px;
+        margin: 30px auto;
         display: flex;
         flex: 1;
 
@@ -88,13 +88,11 @@ export const RepositoryInfo = styled.section`
 export const Issues = styled.div`
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
-    border-top: 1px solid #bbb;
 
     a {
         background: #fff;
         padding: 15px;
-        margin-top: 30px;
+        margin-top: 10px;
         border-radius: 5px;
         width: 100%;
         text-decoration: none;
@@ -103,7 +101,7 @@ export const Issues = styled.div`
         align-items: center;
 
         & + a {
-            margin-top: 15px;
+            margin-top: 30px;
         }
 
         &:hover {

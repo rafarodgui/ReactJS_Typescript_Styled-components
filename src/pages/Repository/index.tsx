@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 
@@ -12,10 +12,22 @@ interface Repository {
     id: number;
     full_name: string;
     description: string;
+    stargazers_count: number;
+    forks_count: number;
+    open_issues_count: number;
     url: string;
     owner: {
         login: string;
         avatar_url: string;
+    }
+}
+
+interface Issue {
+    id: number;
+    title: string;
+    html_url: string;
+    user: {
+        login: string;
     }
 }
 
@@ -24,18 +36,20 @@ interface RepositoryParams {
 }
 
 const Repository: React.FC = () => {
+  const [repository, setRepository] = useState<Repository | null>(null);
+  const [issues, setIssues] = useState<Issue[]>([]);
+
   const { params } = useRouteMatch<RepositoryParams>();
 
-  const [error, setError] = useState('');
-  /* const [repository, setRepository] = useState<Repository>(() => {
- const storagedRepository = localStorage.getItem(`@GithubExplorer:repository/${params.repository}`);
+  useEffect(() => {
+    api.get(`/repos/${params.repository}`).then((response) => {
+      setRepository(response.data);
+    });
 
-    if (!storagedRepository) {
-      setError('Ops, nothing here');
-    }
-
-    return repository;
-  }); */
+    api.get(`/repos/${params.repository}/issues`).then((response) => {
+      setIssues(response.data);
+    });
+  }, [params.repository]);
 
   return (
     <>
@@ -49,40 +63,49 @@ const Repository: React.FC = () => {
         </Link>
       </Header>
 
-      <RepositoryInfo>
-        <header>
-          <img src="https://scontent.fcgh39-1.fna.fbcdn.net/v/t1.0-9/74308636_2774066505939179_2798541002913087488_n.jpg?_nc_cat=103&_nc_sid=85a577&_nc_oc=AQlHU3S9mQMeC-OUp-MfzJg1_NpeV85qu8-mbI2gifVPUWa4O11IqgPSEa2Be-Byw3Y&_nc_ht=scontent.fcgh39-1.fna&oh=9e3ccff605ef435cf5c417ba1f528ca1&oe=5EF0823F" alt="repository_avatar" />
-          <div>
-            <strong>Repository owner</strong>
-            <p>Repository descripton</p>
-          </div>
-        </header>
+      {
+         repository && (
+         <RepositoryInfo>
+           <header>
+             <img src={repository.owner.avatar_url} alt="repository_avatar" />
+             <div>
+               <strong>{repository.full_name}</strong>
+               <p>{repository.description}</p>
+             </div>
+           </header>
 
-        <ul>
-          <li>
-            <strong>100</strong>
-            <span>Stars</span>
-          </li>
-          <li>
-            <strong>45</strong>
-            <span>Forks</span>
-          </li>
-          <li>
-            <strong>18</strong>
-            <span>Issues</span>
-          </li>
-        </ul>
-      </RepositoryInfo>
+           <ul>
+             <li>
+               <strong>{repository.stargazers_count}</strong>
+               <span>Stars</span>
+             </li>
+             <li>
+               <strong>{repository.forks_count}</strong>
+               <span>Forks</span>
+             </li>
+             <li>
+               <strong>{repository.open_issues_count}</strong>
+               <span>Issues</span>
+             </li>
+           </ul>
+         </RepositoryInfo>
+         )
+     }
 
-      <Issues>
-        <Link to="/">
-          <div>
-            <strong>asas</strong>
-            <p>asas</p>
-          </div>
-          <MdChevronRight size={24} color="#ff5500" />
-        </Link>
-      </Issues>
+      {
+         issues.map((issue) => (
+           <Issues key={issue.id}>
+             <a href={issue.html_url} target="blank">
+               <div>
+                 <strong>{issue.title}</strong>
+                 <p>{issue.user.login}</p>
+               </div>
+               <MdChevronRight size={24} color="#ff5500" />
+             </a>
+           </Issues>
+         ))
+     }
+
     </>
   );
 };
